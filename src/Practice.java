@@ -61,6 +61,21 @@ public class Practice {
     return null;
   }
 
+
+  /**
+   * Returns whether all reachable vertices (including the starting vertex) hold
+   * odd values. Returns false if at least one reachable vertex (including the starting vertex)
+   * holds an even value.
+   * 
+   * If the given vertex is null, returns true.
+   * 
+   * @param vertex The starting vertex
+   * @return true if all reachable vertices hold odd values, false otherwise
+   */
+  public boolean allOdd(Vertex<Integer> vertex) {
+    return true;
+  }
+
   /**
    * Determines whether there exists a strictly increasing path from the given start vertex
    * to the target vertex.

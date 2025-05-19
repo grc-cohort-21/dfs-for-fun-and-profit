@@ -229,6 +229,63 @@ public class PracticeTest {
   }
 
   // ---------------------------
+  // Tests for allOdd
+  // ---------------------------
+
+
+  @Test
+  public void testAllOdd_notAllOdd() {
+    Practice practice = new Practice();
+    GraphData graph = buildComplexGraph();
+
+    boolean actual = practice.allOdd(graph.v67);
+    assertFalse(actual);
+  }
+
+  @Test
+  public void testAllOdd_yesAllOdd() {
+    Practice practice = new Practice();
+    GraphData graph = buildComplexGraph();
+
+    boolean actual = practice.allOdd(graph.v45);
+    assertTrue(actual);
+  }
+
+  @Test
+  public void testAllOdd_oddLeaf() {
+    Practice practice = new Practice();
+    GraphData graph = buildComplexGraph();
+
+    boolean actual = practice.allOdd(graph.v23);
+    assertTrue(actual);
+  }
+
+  @Test
+  public void testAllOdd_secondBranchEven() {
+    Practice practice = new Practice();
+    Vertex<Integer> vertex = new Vertex<>(9);
+    Vertex<Integer> evenBranch = new Vertex<>(11);
+    evenBranch.neighbors.add(new Vertex<Integer>(8));
+    vertex.neighbors.add(new Vertex<Integer>(5));
+    vertex.neighbors.add(evenBranch);
+
+    boolean actual = practice.allOdd(vertex);
+    assertFalse(actual);
+  }
+
+  @Test
+  public void testAllOdd_givenNodeEven() {
+    Practice practice = new Practice();
+    Vertex<Integer> vertex = new Vertex<>(6);
+    vertex.neighbors.add(new Vertex<Integer>(5));
+    vertex.neighbors.add(new Vertex<Integer>(7));
+
+    boolean actual = practice.allOdd(vertex);
+    assertFalse(actual);
+  }
+
+
+  // ---------------------------
   // Tests for hasStrictlyIncreasingPath
   // ---------------------------
 
