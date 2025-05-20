@@ -1,3 +1,4 @@
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -18,8 +19,20 @@ public class Practice {
    * @param vertex The starting vertex for the traversal.
    */
   public <T> void printVertexVals(Vertex<T> vertex) {
+    Set<Vertex<T>> set = new HashSet<>();
+
+    printVertexVals(vertex, set);
   }
 
+  public <T> void printVertexVals(Vertex<T> vertex, Set<Vertex<T>> set) {
+    if (vertex == null || set.contains(vertex)) return;
+
+    System.out.println(vertex.data);
+    set.add(vertex);
+    for (Vertex<T> neighbor : vertex.neighbors) {
+      printVertexVals(neighbor, set);
+    }
+  }
   /**
    * Returns a set of all vertices reachable from the given starting vertex,
    * including the starting vertex itself.
@@ -30,9 +43,20 @@ public class Practice {
    * @return A set containing all reachable vertices, or an empty set if vertex is null.
    */
   public <T> Set<Vertex<T>> reachable(Vertex<T> vertex) {
-    return null;
-  }
+    Set<Vertex<T>> set = new HashSet<>();
 
+    reachable(vertex, set);
+    return set;
+  }
+  
+  public <T> void reachable(Vertex<T> vertex, Set<Vertex<T>> set) {
+    if (vertex == null || set.contains(vertex)) return;
+    
+    set.add(vertex);
+    for (Vertex<T> neighbor : vertex.neighbors) {
+      reachable(neighbor, set);
+    }
+  }
   /**
    * Returns the maximum value among all vertices reachable from the given starting vertex,
    * including the starting vertex itself.
@@ -43,7 +67,21 @@ public class Practice {
    * @return The maximum value of any reachable vertex, or Integer.MIN_VALUE if vertex is null.
    */
   public int max(Vertex<Integer> vertex) {
-    return -1;
+    int max = Integer.MIN_VALUE;
+    Set<Vertex<Integer>> set = new HashSet<>();
+
+    return max(vertex, max, set);
+  } 
+
+  public int max(Vertex<Integer> vertex, int max, Set<Vertex<Integer>> set) {
+    if (vertex == null || set.contains(vertex)) return max;
+    
+    set.add(vertex);
+    int currentMax = vertex.data;
+    for (Vertex<Integer> neighbor : vertex.neighbors) {  
+      currentMax = Math.max(max(neighbor, max, set), currentMax);
+    }
+    return currentMax;
   }
 
   /**
