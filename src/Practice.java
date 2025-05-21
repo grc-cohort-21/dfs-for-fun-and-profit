@@ -1,3 +1,5 @@
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -18,6 +20,17 @@ public class Practice {
    * @param vertex The starting vertex for the traversal.
    */
   public <T> void printVertexVals(Vertex<T> vertex) {
+    Set<Vertex<T>> visited = new HashSet<>();
+    printVertexVals(vertex, visited);
+  }
+  public <T> void printVertexVals(Vertex<T> vertex, Set<Vertex<T>> visited){
+     if(vertex == null || visited.contains(vertex)) return;
+   
+    System.out.println(vertex.data);
+    visited.add(vertex);
+    for(Vertex<T> neighbor : vertex.neighbors){
+        printVertexVals(neighbor, visited);
+    }
   }
 
   /**
@@ -30,8 +43,19 @@ public class Practice {
    * @return A set containing all reachable vertices, or an empty set if vertex is null.
    */
   public <T> Set<Vertex<T>> reachable(Vertex<T> vertex) {
-    return null;
+    Set<Vertex<T>> visited = new HashSet<>();
+    
+    return reachable(vertex, visited);
   }
+  public <T> Set<Vertex<T>> reachable(Vertex<T> vertex, Set<Vertex<T>> visited) {
+  if(vertex == null || visited.contains(vertex)) return visited;
+    visited.add(vertex);
+    for(Vertex<T> neighbor : vertex.neighbors){
+        reachable(neighbor, visited);
+    }
+    return visited;
+  }
+
 
   /**
    * Returns the maximum value among all vertices reachable from the given starting vertex,
@@ -43,8 +67,15 @@ public class Practice {
    * @return The maximum value of any reachable vertex, or Integer.MIN_VALUE if vertex is null.
    */
   public int max(Vertex<Integer> vertex) {
-    return -1;
+    if(vertex == null) return Integer.MIN_VALUE;
+    Set<Vertex<Integer>> visited = reachable(vertex);
+    Set<Integer> nums = new HashSet<>();
+    for(Vertex<Integer> v : visited){
+      nums.add(v.data);
+    }
+    return Collections.max(nums);
   }
+ 
 
   /**
    * Returns a set of all leaf vertices reachable from the given starting vertex.
