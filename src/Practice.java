@@ -125,7 +125,24 @@ public class Practice {
    * @return true if all reachable vertices hold odd values, false otherwise
    */
   public boolean allOdd(Vertex<Integer> vertex) {
+    Set<Vertex<Integer>> myVisited = new HashSet<>();
+    Set<Integer> values = new HashSet<>();
+    allOddHelper(vertex, myVisited, values);
+    for(int value : values){
+      if(value%2 == 0){
+        return false;
+      }
+    }
     return true;
+  }
+
+  public static void allOddHelper(Vertex<Integer> vertex, Set<Vertex<Integer>> visited, Set<Integer> values){
+    if(vertex == null || visited.contains(vertex)) return;
+    visited.add(vertex);
+    values.add(vertex.data);
+    for(Vertex<Integer> neighbor : vertex.neighbors){
+      allOddHelper(neighbor, visited, values);
+    }
   }
 
   /**
@@ -142,7 +159,24 @@ public class Practice {
    * @return True if a strictly increasing path exists, false otherwise.
    * @throws NullPointerException if either start or end is null.
    */
-  public boolean hasStrictlyIncreasingPath(Vertex<Integer> start, Vertex<Integer> end) {
+  public boolean hasStrictlyIncreasingPath(Vertex<Integer> start, Vertex<Integer> end) throws NullPointerException{
+  if(start == null || end == null) throw new NullPointerException();
+  if(start == end) return true;
+  Set<Vertex<Integer>> myVisited = new HashSet<>();
+  return hasStrictlyIncreasingPathHelper(start, end, myVisited);
+  }
+
+  public boolean hasStrictlyIncreasingPathHelper(Vertex<Integer> vertex, Vertex<Integer> end, Set<Vertex<Integer>> visited) {
+    if(vertex == null) return false;
+    if(visited.contains(vertex)) return true;
+    visited.add(vertex);
+    for(Vertex<Integer> neighbor : vertex.neighbors){
+      if(neighbor.data > vertex.data){
+        hasStrictlyIncreasingPathHelper(neighbor, end, visited);
+      }
+      else return false;
+    }
+    if(visited.contains(end)) return true;
     return false;
   }
 }
