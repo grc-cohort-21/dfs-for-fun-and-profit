@@ -1,5 +1,7 @@
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Set;
 
 /**
@@ -89,7 +91,19 @@ public class Practice {
    * @return A set containing all reachable leaf vertices, or an empty set if vertex is null.
    */
   public <T> Set<Vertex<T>> leaves(Vertex<T> vertex) {
-    return null;
+    Set<Vertex<T>> visited = new HashSet<>();
+    Set<Vertex<T>> leavesSet = new HashSet<>();
+    return leaves(vertex, visited, leavesSet);
+  }
+
+  public <T> Set<Vertex<T>> leaves(Vertex<T> vertex, Set<Vertex<T>> visited, Set<Vertex<T>> leavesSet) {
+  if(vertex == null || visited.contains(vertex)) return leavesSet;
+    if(vertex.neighbors.isEmpty()) leavesSet.add(vertex);
+    visited.add(vertex);
+    for(Vertex<T> neighbor : vertex.neighbors){
+        leaves(neighbor, visited, leavesSet);
+    }
+    return leavesSet;
   }
 
 
@@ -104,6 +118,12 @@ public class Practice {
    * @return true if all reachable vertices hold odd values, false otherwise
    */
   public boolean allOdd(Vertex<Integer> vertex) {
+    if(vertex == null) return true;
+    Set<Vertex<Integer>> visited = reachable(vertex);
+    Set<Integer> nums = new HashSet<>();
+    for(Vertex<Integer> v : visited){
+      if(v.data%2 == 0) return false;
+    }
     return true;
   }
 
@@ -121,7 +141,28 @@ public class Practice {
    * @return True if a strictly increasing path exists, false otherwise.
    * @throws NullPointerException if either start or end is null.
    */
-  public boolean hasStrictlyIncreasingPath(Vertex<Integer> start, Vertex<Integer> end) {
-    return false;
+  public boolean hasStrictlyIncreasingPath(Vertex<Integer> start, Vertex<Integer> end) throws NullPointerException {
+    if(start == null || end == null) throw new NullPointerException();
+    Queue<Integer> que = new LinkedList<>();
+     Set<Vertex<Integer>> visited = new HashSet<>();
+    
+    return hasStrictlyIncreasingPath(start, end, visited, que);
   }
+  public boolean hasStrictlyIncreasingPath(Vertex<Integer> vertex, Vertex<Integer> end, Set<Vertex<Integer>> visited, Queue<Integer> que) {
+    boolean status = false;
+    if(vertex == end){
+      return true;
+    }
+    visited.add(vertex);
+    que.add(vertex.data);
+    
+    for(Vertex<Integer> neighbor : vertex.neighbors){
+        if(neighbor.data > vertex.data){
+          status = hasStrictlyIncreasingPath(neighbor, end, visited, que);
+        }
+    }
+      
+      return status;
+  }
+
 }
