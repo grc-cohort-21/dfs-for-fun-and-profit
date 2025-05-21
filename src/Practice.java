@@ -137,6 +137,25 @@ public class Practice {
    * @return true if all reachable vertices hold odd values, false otherwise
    */
   public boolean allOdd(Vertex<Integer> vertex) {
+    Set<Vertex<Integer>> set = new HashSet<>();
+
+    if(vertex == null) return true;
+
+    return allOddHelper(vertex, set);
+  }
+
+  public boolean allOddHelper(Vertex<Integer> current, Set<Vertex<Integer>> vists)
+  {
+    if(current == null || vists.contains(current)) return true;
+
+    if(current.data % 2 == 0) return false;
+    vists.add(current);
+
+    for(Vertex<Integer> neighbor : current.neighbors)
+    {
+      if(!allOddHelper(neighbor, vists)) return false;
+    }
+
     return true;
   }
 
@@ -155,6 +174,30 @@ public class Practice {
    * @throws NullPointerException if either start or end is null.
    */
   public boolean hasStrictlyIncreasingPath(Vertex<Integer> start, Vertex<Integer> end) {
+    if(start == null || end == null) return false;
+    
+    Set<Vertex<Integer>> set = new HashSet<>();
+
+    return strictlyIncreasingHelper(start, end, set);
+  }
+
+  public boolean strictlyIncreasingHelper(Vertex<Integer> start, Vertex<Integer> end, Set<Vertex<Integer>> vists)
+  {
+    if(start == end) return true;
+
+    vists.add(start);
+
+    for(Vertex<Integer> neighbor : start.neighbors)
+    {
+      if(!vists.contains(neighbor) && neighbor.data > start.data)
+      {
+        if(strictlyIncreasingHelper(neighbor, end, vists) == true)
+        {
+          return true;
+        }
+      }
+    }
+
     return false;
   }
 }
