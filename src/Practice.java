@@ -99,8 +99,41 @@ private <T> void reachableHelper(Vertex<T> vertex, Set<Vertex<T>> visited) {
    * @return The maximum value of any reachable vertex, or Integer.MIN_VALUE if vertex is null.
    */
   public int max(Vertex<Integer> vertex) {
-    return -1;
-  }
+    
+  if (vertex == null) {
+
+    return Integer.MIN_VALUE;//returns Integer.MIN_VALUE if null
+
+  }//end if
+
+  Set<Vertex<Integer>> visited = new HashSet<>();
+  return maxHelper(vertex, visited);
+
+}//end max
+
+private int maxHelper(Vertex<Integer> vertex, Set<Vertex<Integer>> visited) {
+  if (visited.contains(vertex)) {
+
+    return Integer.MIN_VALUE;
+
+  }//end if
+
+  visited.add(vertex);
+  int max = vertex.data;
+
+  for (Vertex<Integer> neighbor : vertex.neighbors) {
+
+    max = Math.max(max, maxHelper(neighbor, visited));
+
+  }//end for
+
+  return max;
+
+}//end maxHelper
+
+
+
+
 
   /**
    * Returns a set of all leaf vertices reachable from the given starting vertex.
