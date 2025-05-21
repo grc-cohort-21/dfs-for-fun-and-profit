@@ -147,8 +147,45 @@ private int maxHelper(Vertex<Integer> vertex, Set<Vertex<Integer>> visited) {
    * @return A set containing all reachable leaf vertices, or an empty set if vertex is null.
    */
   public <T> Set<Vertex<T>> leaves(Vertex<T> vertex) {
-    return null;
-  }
+
+
+  Set<Vertex<T>> result = new HashSet<>();
+  Set<Vertex<T>> visited = new HashSet<>();
+
+  leavesHelper(vertex, visited, result);
+  return result;
+
+}//end leaves
+
+private <T> void leavesHelper(Vertex<T> vertex, Set<Vertex<T>>visited, Set<Vertex<T>>result) {
+  
+  if (vertex == null || visited.contains(vertex)) {
+
+    return;
+
+  }//end if
+
+  visited.add(vertex);
+
+
+  if (vertex.neighbors.isEmpty()) {
+
+    result.add(vertex);
+    return;
+
+  }//end if
+
+  for (Vertex<T> neighbor : vertex.neighbors) {
+
+    leavesHelper(neighbor, visited, result);
+
+  }//end for
+
+
+
+}//end leavesHelper
+
+
 
 
   /**
