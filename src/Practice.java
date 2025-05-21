@@ -258,6 +258,44 @@ private boolean allOddHelper(Vertex<Integer> vertex, Set<Vertex<Integer>> visite
    * @throws NullPointerException if either start or end is null.
    */
   public boolean hasStrictlyIncreasingPath(Vertex<Integer> start, Vertex<Integer> end) {
-    return false;
-  }
-}
+
+    if (start ==null || end ==null) {
+
+    throw new NullPointerException("Error: Start/end vertex is null!");
+    
+  }//end if
+
+  Set<Vertex<Integer>> visited = new HashSet<>();
+  return hasStrictlyIncreasingPathHelper(start, end, visited);
+  
+}//end hasStrictlyIncreasingPath
+
+private boolean hasStrictlyIncreasingPathHelper(Vertex<Integer> current, Vertex<Integer>target, Set<Vertex<Integer>> visited) {
+
+  if (current == target) {
+
+    return true;
+  
+  }//end if
+
+  visited.add(current);
+
+  for (Vertex<Integer> neighbor : current.neighbors) {
+
+    if (!visited.contains(neighbor) && neighbor.data > current.data) {
+      if (hasStrictlyIncreasingPathHelper(neighbor, target, visited)) {
+
+        return true;
+
+      }//end if
+    }//end if
+
+  }//end for
+
+  return false;
+
+}//end hasStrictlyIncreasingPathHelper
+
+
+
+}//end practice.java
