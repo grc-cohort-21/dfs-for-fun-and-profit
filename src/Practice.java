@@ -41,8 +41,18 @@ public class Practice {
    * @param vertex The starting vertex for the traversal.
    * @return A set containing all reachable vertices, or an empty set if vertex is null.
    */
-  public <T> Set<Vertex<T>> reachable(Vertex<T> vertex) {
-    return null;
+  public <T> Set<Vertex<T>> reachable(Vertex<T> vertex) 
+  {
+    Set<Vertex<T>> visited = new HashSet<>();
+    return reachable(vertex, visited);
+  }
+
+  public <T> Set<Vertex<T>> reachable(Vertex<T> vertex, Set<Vertex<T>> visited)
+  {
+    if (vertex == null || visited.contains(vertex)) return visited;
+    visited.add(vertex);
+    for (Vertex<T> neighbor : vertex.neighbors) reachable(neighbor, visited);
+    return visited;
   }
 
   /**
