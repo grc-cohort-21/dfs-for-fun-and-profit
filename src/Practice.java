@@ -152,27 +152,20 @@ public class Practice {
   public boolean hasStrictlyIncreasingPath(Vertex<Integer> start, Vertex<Integer> end) throws NullPointerException {
     if (start == null || end == null) throw new NullPointerException();
     Set<Vertex<Integer>> visited = new HashSet<>();
-    return hasStrictlyIncreasingPath(start, end, Integer.MIN_VALUE, visited);
+    return hasStrictlyIncreasingPath(start, end, visited);
   }
 
-  public boolean hasStrictlyIncreasingPath(Vertex<Integer> start, Vertex<Integer> end, int prev, Set<Vertex<Integer>> visited) {
+  public boolean hasStrictlyIncreasingPath(Vertex<Integer> start, Vertex<Integer> end, Set<Vertex<Integer>> visited) {
     if (start == null || visited.contains(start)) return false;
-    System.out.println(start.data);
-
     visited.add(start);
+    if (start.equals(end)) return true;
     
-    boolean increasing = true;
-    if (start == end) {
-      System.out.println("start == end");
-      return increasing;
-    } 
-    if (start.data <= prev) increasing = false;
-
     for (Vertex<Integer> neighbor : start.neighbors) {
-      // System.out.println(neighbor.data);
-      increasing = increasing && hasStrictlyIncreasingPath(neighbor, end, start.data, visited);
+      boolean increasing = start.data < neighbor.data;
+      boolean increasingPath = hasStrictlyIncreasingPath(neighbor, end, visited);
+      if (increasing && increasingPath) return true;
     } 
 
-    return increasing;
+    return false;
   }
 }
