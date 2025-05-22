@@ -1,6 +1,3 @@
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.*;
 /**
  * A utility class providing various graph traversal methods using DFS.
@@ -51,17 +48,15 @@ public class Practice {
    */
   public <T> Set<Vertex<T>> reachable(Vertex<T> vertex) {
     Set<Vertex<T>> reached = new HashSet<>();
-    if(vertex == null)
-    {
-      return reached;
-    }
+    
     reachable(vertex, reached);
+
     return reached;
   }
 
   private static <T> void reachable(Vertex<T> vertex, Set<Vertex<T>> reached)
   {
-    if(vertex == null)
+    if(vertex == null || reached.contains(vertex))
     {
       return;
     }
@@ -85,26 +80,25 @@ public class Practice {
    */
   public int max(Vertex<Integer> vertex) {
     List<Integer> nums = new ArrayList<>();
-    getValues(vertex, nums);
-
-    Collections.sort(nums);
-
-    return nums.get(0);
+    
+    return max(vertex, nums);    
   }
 
-  private static void getValues(Vertex<Integer> vertex, List<Integer> nums)
+  private int max(Vertex<Integer> vertex, List<Integer> nums)
   {
-    if(vertex == null)
+    if(vertex == null || nums.contains(vertex.data))
     {
-      return;
+      return Integer.MIN_VALUE;
     }
 
     nums.add(vertex.data);
+    int max = vertex.data;
 
     for(Vertex<Integer> n : vertex.neighbors)
     {
-      getValues(n, nums);
+       max = Math.max(max, max(n, nums));
     }
+    return max;
   }
 
   /**
