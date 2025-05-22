@@ -1,5 +1,7 @@
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
-
+import java.util.*;
 /**
  * A utility class providing various graph traversal methods using DFS.
  */
@@ -18,6 +20,24 @@ public class Practice {
    * @param vertex The starting vertex for the traversal.
    */
   public <T> void printVertexVals(Vertex<T> vertex) {
+    Set<Vertex<T>> visited = new HashSet<>();
+    printVertexVals(vertex, visited);
+  }
+
+  private static <T> void printVertexVals(Vertex<T> vertex, Set<Vertex<T>> visited)
+  {
+    if(vertex == null || visited.contains(vertex))
+    {
+      return;
+    }
+
+    System.out.println(vertex.data);
+    visited.add(vertex);
+
+    for(Vertex<T> neighbor: vertex.neighbors)
+    {
+      printVertexVals(neighbor, visited);
+    }
   }
 
   /**
@@ -30,7 +50,28 @@ public class Practice {
    * @return A set containing all reachable vertices, or an empty set if vertex is null.
    */
   public <T> Set<Vertex<T>> reachable(Vertex<T> vertex) {
-    return null;
+    Set<Vertex<T>> reached = new HashSet<>();
+    if(vertex == null)
+    {
+      return reached;
+    }
+    reachable(vertex, reached);
+    return reached;
+  }
+
+  private static <T> void reachable(Vertex<T> vertex, Set<Vertex<T>> reached)
+  {
+    if(vertex == null)
+    {
+      return;
+    }
+
+    reached.add(vertex);
+
+    for(Vertex<T> n : vertex.neighbors)
+    {
+      reachable(n, reached);
+    }
   }
 
   /**
@@ -43,7 +84,27 @@ public class Practice {
    * @return The maximum value of any reachable vertex, or Integer.MIN_VALUE if vertex is null.
    */
   public int max(Vertex<Integer> vertex) {
-    return -1;
+    List<Integer> nums = new ArrayList<>();
+    getValues(vertex, nums);
+
+    Collections.sort(nums);
+
+    return nums.get(0);
+  }
+
+  private static void getValues(Vertex<Integer> vertex, List<Integer> nums)
+  {
+    if(vertex == null)
+    {
+      return;
+    }
+
+    nums.add(vertex.data);
+
+    for(Vertex<Integer> n : vertex.neighbors)
+    {
+      getValues(n, nums);
+    }
   }
 
   /**
@@ -58,6 +119,7 @@ public class Practice {
    * @return A set containing all reachable leaf vertices, or an empty set if vertex is null.
    */
   public <T> Set<Vertex<T>> leaves(Vertex<T> vertex) {
+    
     return null;
   }
 
