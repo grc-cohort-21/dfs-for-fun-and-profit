@@ -218,11 +218,13 @@ public class Practice {
 
     for(Vertex<Integer> n : current.neighbors)
     {
-      if(visited.contains(n) && current.data < n.data)
+      if(!visited.contains(n) && current.data < n.data)
       {
-        return true;
+        if(hasStrictlyIncreasingPath(n, end, visited))
+        {
+          return true;
+        }
       }
-      hasStrictlyIncreasingPath(n, end, visited);
     }
     return false;
   }
