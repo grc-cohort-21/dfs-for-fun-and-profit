@@ -132,23 +132,20 @@ public class Practice {
    */
   public boolean allOdd(Vertex<Integer> vertex) {
     Set<Vertex<Integer>> seen = new HashSet<>();
-    boolean isOdd = true;
-    allOdd(vertex, seen, isOdd);
 
-    return isOdd;
+    return allOdd(vertex, seen);
   }
 
-  public <T> void allOdd(Vertex<Integer> vertex, Set<Vertex<Integer>> seen, boolean isOdd){
-    if(vertex == null || seen.contains(vertex)) return;
+  public static boolean allOdd(Vertex<Integer> vertex, Set<Vertex<Integer>> seen){
+    if(vertex == null || seen.contains(vertex)) return true;
     seen.add(vertex);
-    if(vertex.data % 2 == 0){
-      isOdd = false;
+    if(vertex.data % 2 == 0) return false;
+    for(Vertex<Integer> neighbor : vertex.neighbors){
+      if(allOdd(neighbor, seen) == false){
+        return false;
+      }
     }
-
-
-    for (Vertex<Integer> neighbor : vertex.neighbors) {
-      allOdd(neighbor, seen, isOdd);
-    }
+    return true;
   }
 
   /**
