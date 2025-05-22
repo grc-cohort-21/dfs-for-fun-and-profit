@@ -99,7 +99,27 @@ public class Practice {
    * @return A set containing all reachable leaf vertices, or an empty set if vertex is null.
    */
   public <T> Set<Vertex<T>> leaves(Vertex<T> vertex) {
-    return null;
+    Set<Vertex<T>> set = new HashSet<>();
+    Set<Vertex<T>> leavesSet = new HashSet<>();
+
+    return leaves(vertex, set, leavesSet);
+  }
+
+  public <T> Set<Vertex<T>> leaves(Vertex<T> vertex, Set<Vertex<T>> set, Set<Vertex<T>> leavesSet) {
+    if(vertex == null || set.contains(vertex)) return leavesSet;
+
+    set.add(vertex);
+
+    if (vertex.neighbors == null || vertex.neighbors.isEmpty()) {
+      leavesSet.add(vertex);
+      return leavesSet;
+    }
+
+    for(Vertex<T> neighbor : vertex.neighbors){
+      leaves(neighbor, set, leavesSet);
+    }
+
+    return leavesSet;
   }
 
 
@@ -132,6 +152,17 @@ public class Practice {
    * @throws NullPointerException if either start or end is null.
    */
   public boolean hasStrictlyIncreasingPath(Vertex<Integer> start, Vertex<Integer> end) {
+    if(start == null || end == null) throw new NullPointerException();
+    if(start == end) return true;
+
+    for(Vertex<Integer> neighbor : start.neighbors){
+      if(neighbor.data > start.data){
+        if(hasStrictlyIncreasingPath(neighbor, end)){
+          return true;
+        }
+      }
+    }
+
     return false;
   }
 }
