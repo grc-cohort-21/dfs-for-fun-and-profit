@@ -87,7 +87,7 @@ public class Practice {
 
     for (Vertex<Integer> neighbor : vertex.neighbors) {
       int childMax = maxDFS(neighbor, visited);
-      
+
       maxValue = Math.max(maxValue, childMax);
    }
 
@@ -106,7 +106,37 @@ public class Practice {
    * @return A set containing all reachable leaf vertices, or an empty set if vertex is null.
    */
   public <T> Set<Vertex<T>> leaves(Vertex<T> vertex) {
-    return null;
+
+  Set<Vertex<T>> leafSet = new HashSet<>();
+
+  Set<Vertex<T>> visited = new HashSet<>();
+
+  if (vertex == null) {
+    return leafSet;
+  }
+
+
+  findLeafNodes(vertex, visited, leafSet);
+  return leafSet;
+}
+
+
+private <T> void findLeafNodes(Vertex<T> current, Set<Vertex<T>> visited, Set<Vertex<T>> leafSet) {
+  
+  if (visited.contains(current)) {
+    return;
+  }
+
+  
+  visited.add(current);
+
+  if (current.neighbors.isEmpty()) {
+    leafSet.add(current);
+  }
+
+  for (Vertex<T> neighbor : current.neighbors) {
+    findLeafNodes(neighbor, visited, leafSet);
+  }
   }
 
 
