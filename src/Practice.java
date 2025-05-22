@@ -95,9 +95,12 @@ public class Practice {
 
     for(Vertex<Integer> current : vertex.neighbors)
     {
-      
+      if(max < current.data)
+      {
+        max = max(vertex, visited, max);
+      }
     }
-    return parentMax;
+    return max;
   }
 
   /**
