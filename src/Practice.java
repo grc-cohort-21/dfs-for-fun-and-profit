@@ -174,7 +174,10 @@ public class Practice {
    * @throws NullPointerException if either start or end is null.
    */
   public boolean hasStrictlyIncreasingPath(Vertex<Integer> start, Vertex<Integer> end) {
-    if(start == null || end == null) return false;
+    if(start == null || end == null)
+    {
+      throw new NullPointerException("start or end is null");
+    }
     
     Set<Vertex<Integer>> set = new HashSet<>();
 
