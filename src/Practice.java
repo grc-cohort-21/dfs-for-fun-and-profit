@@ -169,6 +169,25 @@ private boolean checkOdd(Vertex<Integer> node, Set<Vertex<Integer>> visited) {
    * @throws NullPointerException if either start or end is null.
    */
   public boolean hasStrictlyIncreasingPath(Vertex<Integer> start, Vertex<Integer> end) {
+
+    if (start == null || end == null) throw new NullPointerException();
+
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    return search(start, end, visited);
+  }
+  
+  private boolean search(Vertex<Integer> now, Vertex<Integer> end, Set<Vertex<Integer>> visited) {
+    if (now == end) return true;
+  
+    visited.add(now);
+  
+    for (Vertex<Integer> next : now.neighbors) {
+      if (!visited.contains(next) && next.data > now.data) {
+        if (search(next, end, visited)) return true;
+      }
+    }
+
+   
     return false;
   }
 }
