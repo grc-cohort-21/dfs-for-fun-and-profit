@@ -96,8 +96,20 @@ public class Practice {
    * @param vertex The starting vertex for the traversal.
    * @return A set containing all reachable leaf vertices, or an empty set if vertex is null.
    */
-  public <T> Set<Vertex<T>> leaves(Vertex<T> vertex) {
-    return null;
+  public <T> Set<Vertex<T>> leaves(Vertex<T> vertex) 
+  {
+    Set<Vertex<T>> visited = new HashSet<>();
+    Set<Vertex<T>> leaves = new HashSet<>();
+    return leaves(vertex, visited, leaves);
+  }
+
+  public <T> Set<Vertex<T>> leaves(Vertex<T> vertex, Set<Vertex<T>> visited, Set<Vertex<T>> leaves)
+  {
+    if (vertex == null || visited.contains(vertex)) return leaves;
+    visited.add(vertex);
+    if (vertex.neighbors.isEmpty()) leaves.add(vertex);
+    for (Vertex<T> neighbor : vertex.neighbors) leaves(neighbor, visited, leaves);
+    return leaves;
   }
 
 
