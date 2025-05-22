@@ -85,19 +85,19 @@ public class Practice {
     {
       return max;
     }
+    visited.add(vertex);
 
     if(max < vertex.data)
     {
       max = vertex.data;
     }
 
-    visited.add(vertex);
 
     for(Vertex<Integer> current : vertex.neighbors)
     {
       if(max < current.data)
       {
-        max = max(vertex, visited, max);
+        max = max(current, visited, current.data);
       }
     }
     return max;
