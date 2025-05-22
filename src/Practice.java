@@ -86,7 +86,7 @@ public class Practice {
     {
       return max;
     }
-    
+
     if(max < vertex.data)
     {
       max = vertex.data;
@@ -116,9 +116,28 @@ public class Practice {
    * @return A set containing all reachable leaf vertices, or an empty set if vertex is null.
    */
   public <T> Set<Vertex<T>> leaves(Vertex<T> vertex) {
-    return null;
-  }
+    Set<Vertex<T>> visited = new HashSet<>();
+    Set<Vertex<T>> leafSet = new HashSet<>();
 
+    return leaves(vertex, visited, leafSet);
+  }
+  
+  public <T> Set<Vertex<T>> leaves(Vertex<T> vertex, Set<Vertex<T>> visited, Set<Vertex<T>> leafSet)
+  {
+    if(vertex == null || visited.contains(vertex)) return leafSet;
+
+    visited.add(vertex);
+
+    for(Vertex<T> current : vertex.neighbors)
+    {
+      if(current.neighbors == null)
+      {
+        leafSet.add(current);
+      }
+      leaves(vertex, visited, leafSet);
+    }
+    return leafSet;
+  }
 
   /**
    * Returns whether all reachable vertices (including the starting vertex) hold
