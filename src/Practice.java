@@ -1,3 +1,4 @@
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -18,6 +19,18 @@ public class Practice {
    * @param vertex The starting vertex for the traversal.
    */
   public <T> void printVertexVals(Vertex<T> vertex) {
+    Set<Vertex<T>> visited = new HashSet<>();
+    printVertexValsHelper(vertex, visited);
+  }
+
+  public <T> void printVertexValsHelper(Vertex<T> vertex, Set<Vertex<T>> visited) {
+    if (vertex == null || visited.contains(vertex)) return;
+
+    visited.add(vertex);
+    System.out.println(vertex.data);
+    for (Vertex<T> neighbor : vertex.neighbors) {
+      printVertexValsHelper(neighbor, visited);
+    }
   }
 
   /**
@@ -30,7 +43,19 @@ public class Practice {
    * @return A set containing all reachable vertices, or an empty set if vertex is null.
    */
   public <T> Set<Vertex<T>> reachable(Vertex<T> vertex) {
-    return null;
+    Set<Vertex<T>> visited = new HashSet<>();
+    if (vertex == null) return visited;
+    return reachableHelper(vertex, visited);
+  }
+
+  public <T> Set<Vertex<T>> reachableHelper(Vertex<T> vertex, Set<Vertex<T>> visited) {
+    if (vertex == null || visited.contains(vertex)) return null;
+
+    visited.add(vertex);
+    for (Vertex<T> neighbor : vertex.neighbors) {
+      printVertexValsHelper(neighbor, visited);
+    }
+    return visited;
   }
 
   /**
@@ -43,7 +68,21 @@ public class Practice {
    * @return The maximum value of any reachable vertex, or Integer.MIN_VALUE if vertex is null.
    */
   public int max(Vertex<Integer> vertex) {
-    return -1;
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    return maxHelper(vertex, visited);
+  }
+
+  public int maxHelper(Vertex<Integer> vertex, Set<Vertex<Integer>> visited) {
+    int max = Integer.MIN_VALUE;
+    if (vertex == null || visited.contains(vertex)) return max;
+
+    visited.add(vertex);
+    int current = vertex.data;
+
+    for (Vertex<Integer> neighbor : vertex.neighbors) {
+      current = Math.max(current, maxHelper(neighbor, visited));
+    }
+    return Math.max(max, current);
   }
 
   /**
@@ -58,7 +97,25 @@ public class Practice {
    * @return A set containing all reachable leaf vertices, or an empty set if vertex is null.
    */
   public <T> Set<Vertex<T>> leaves(Vertex<T> vertex) {
-    return null;
+    Set<Vertex<T>> visited = new HashSet<>();
+    Set<Vertex<T>> leaves = new HashSet<>();
+    if (vertex == null) return leaves;
+    return leavesHelper(vertex, visited, leaves);
+  }
+
+  public <T> Set<Vertex<T>> leavesHelper(Vertex<T> vertex, Set<Vertex<T>> visited, Set<Vertex<T>> leaves) {
+    if (vertex == null || visited.contains(vertex)) return null;
+
+    visited.add(vertex);
+    if (vertex.neighbors.isEmpty()) {
+      leaves.add(vertex);
+    }
+
+    for (Vertex<T> neighbor : vertex.neighbors) {
+      leavesHelper(neighbor, visited, leaves);
+    }
+
+    return leaves;
   }
 
 
@@ -73,7 +130,25 @@ public class Practice {
    * @return true if all reachable vertices hold odd values, false otherwise
    */
   public boolean allOdd(Vertex<Integer> vertex) {
-    return true;
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    return allOddHelper(vertex, visited);
+  }
+
+  public boolean allOddHelper(Vertex<Integer> vertex, Set<Vertex<Integer>> visited) {
+    if (vertex == null || visited.contains(vertex)) return true;
+
+    visited.add(vertex);
+
+    for (Vertex<Integer> neighbor : vertex.neighbors) {
+      if (!allOddHelper(neighbor, visited)) return false;
+    }
+
+    if (vertex.data % 2 == 0) {
+      return false;
+    }
+    else {
+      return true;
+    }
   }
 
   /**
@@ -91,6 +166,26 @@ public class Practice {
    * @throws NullPointerException if either start or end is null.
    */
   public boolean hasStrictlyIncreasingPath(Vertex<Integer> start, Vertex<Integer> end) {
+    if (start == null || end == null) {
+      throw new NullPointerException();
+    }
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    return hasStrictlyIncreasingPathHelper(start, end, visited);
+  }
+
+  public boolean hasStrictlyIncreasingPathHelper(Vertex<Integer> start, Vertex<Integer> end, Set<Vertex<Integer>> visited) {
+    if (start == null || start == end) return true;
+
+    visited.add(start);
+
+    for (Vertex<Integer> neighbor : start.neighbors) {
+      if (!visited.contains(neighbor) && neighbor.data > start.data) {
+        if (hasStrictlyIncreasingPathHelper(neighbor, end, visited)) {
+          return true;
+        }
+      }
+    }
+
     return false;
   }
 }
