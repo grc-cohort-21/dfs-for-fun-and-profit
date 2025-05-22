@@ -81,27 +81,34 @@ public class Practice {
   }
 
   public int max(Vertex<Integer> vertex, Set<Vertex<Integer>> visited) {
-    int max =Integer.MIN_VALUE;
+    int parentMax =Integer.MIN_VALUE;
+    int neighborMax =Integer.MIN_VALUE;
+
     if(vertex == null || visited.contains(vertex))
     {
-      return max;
+      return parentMax;
     }
 
-    if(max < vertex.data)
+    if(parentMax < vertex.data)
     {
-      max = vertex.data;
+      parentMax = vertex.data;
     }
 
     visited.add(vertex);
 
     for(Vertex<Integer> current : vertex.neighbors)
     {
-      if(max < current.data)
+      if(neighborMax < current.data)
       {
-        max = max(vertex, visited);
+        neighborMax = current.data;
       }
+      if(neighborMax > parentMax)
+      {
+        parentMax = neighborMax;
+      }
+      max(current, visited);
     }
-    return max;
+    return parentMax;
   }
 
   /**
@@ -192,7 +199,7 @@ public class Practice {
   }
   public boolean hasStrictlyIncreasingPath(Vertex<Integer> start, Vertex<Integer> end, Set<Vertex<Integer>> visited){
     if(start == null || end == null) throw new NullPointerException("Cannot be null");
-    
+    if(start == end) return true;
     for(Vertex<Integer> current : start.neighbors)
     {
       visited.add(current);
