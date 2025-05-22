@@ -123,8 +123,24 @@ public class Practice {
    * @param vertex The starting vertex
    * @return true if all reachable vertices hold odd values, false otherwise
    */
-  public boolean allOdd(Vertex<Integer> vertex) {
-    return true;
+  public boolean allOdd(Vertex<Integer> vertex) 
+  {
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    boolean oddNums = true;
+    return allOdd(vertex, visited, oddNums);
+  }
+
+  public boolean allOdd(Vertex<Integer> vertex, Set<Vertex<Integer>> visited, boolean oddNums)
+  {
+    if (oddNums == false) return false;
+    if (vertex == null || visited.contains(vertex)) return true;
+    visited.add(vertex);
+    for (Vertex<Integer> neighbor : vertex.neighbors)
+    {
+      if (oddNums == true) oddNums = allOdd(neighbor, visited, oddNums);
+      if (vertex.data % 2 == 0) oddNums = false;
+    }
+    return oddNums;
   }
 
   /**
