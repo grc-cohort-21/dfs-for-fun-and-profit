@@ -121,7 +121,7 @@ public class Practice {
 }
 
 
-private <T> void findLeafNodes(Vertex<T> current, Set<Vertex<T>> visited, Set<Vertex<T>> leafSet) {
+  public <T> void findLeafNodes(Vertex<T> current, Set<Vertex<T>> visited, Set<Vertex<T>> leafSet) {
   
   if (visited.contains(current)) {
     return;
@@ -151,7 +151,37 @@ private <T> void findLeafNodes(Vertex<T> current, Set<Vertex<T>> visited, Set<Ve
    * @return true if all reachable vertices hold odd values, false otherwise
    */
   public boolean allOdd(Vertex<Integer> vertex) {
+
+    if (vertex == null) {
     return true;
+  }
+
+  Set<Vertex<Integer>> visited = new HashSet<>();
+
+  return checkOdd(vertex, visited);
+}
+
+
+  public boolean checkOdd(Vertex<Integer> current, Set<Vertex<Integer>> visited) {
+  if (visited.contains(current)) {
+    return true;
+  }
+
+
+  visited.add(current);
+
+  if (current.data % 2 == 0) {
+    return false;
+  }
+
+  for (Vertex<Integer> neighbor : current.neighbors) {
+    boolean neighborIsOdd = checkOdd(neighbor, visited);
+    if (!neighborIsOdd) {
+      return false; 
+    }
+  }
+
+  return true;
   }
 
   /**
