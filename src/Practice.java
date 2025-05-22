@@ -44,7 +44,20 @@ private <T> void dfsPrint(Vertex<T> vertex, Set<Vertex<T>> visited) {
    * @return A set containing all reachable vertices, or an empty set if vertex is null.
    */
   public <T> Set<Vertex<T>> reachable(Vertex<T> vertex) {
-    return null;
+    Set<Vertex<T>> result = new HashSet<>();
+    findReachable(vertex, result);
+    return result;
+  }
+
+  private <T> void findReachable(Vertex<T> node, Set<Vertex<T>> result) {
+    if (node == null || result.contains(node)) return;
+
+    result.add(node);
+
+    for (Vertex<T> neighbor : node.neighbors) {
+      findReachable(neighbor, result);
+    }
+  
   }
 
   /**
