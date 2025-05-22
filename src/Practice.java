@@ -71,7 +71,20 @@ public class Practice {
    * @return The maximum value of any reachable vertex, or Integer.MIN_VALUE if vertex is null.
    */
   public int max(Vertex<Integer> vertex) {
-    return -1;
+    Set<Vertex<Integer>> set = new HashSet<>();
+    return max(vertex, set);
+  }
+
+  public int max(Vertex<Integer> vertex, Set<Vertex<Integer>> set) {
+    if(vertex == null || set.contains(vertex)) return Integer.MIN_VALUE;
+
+    int maxVal = vertex.data;
+    set.add(vertex);
+
+    for(Vertex<Integer> neighbor : vertex.neighbors){
+      maxVal = Math.max(maxVal, max(neighbor, set));
+    }
+    return maxVal;
   }
 
   /**
