@@ -204,27 +204,11 @@ public class Practice {
     throw new NullPointerException("Start or end vertex is null");
   }
 
-  Set<Vertex<Integer>> visited = new HashSet<>();
+  if (start == end) return true;
 
-  return findPath(start, end, visited);
-}
-
-
-  public boolean findPath(Vertex<Integer> current, Vertex<Integer> end, Set<Vertex<Integer>> visited) {
-  
-  if (current == end) {
-    return true;
-  }
-
-
-  visited.add(current);
-
-  
-  for (Vertex<Integer> neighbor : current.neighbors) {
-   
-    if (!visited.contains(neighbor) && neighbor.data > current.data) {
-      boolean found = findPath(neighbor, end, visited);
-      if (found) return true;
+  for(var neighbor : start.neighbors){
+    if(neighbor.data > start.data){
+      return true;
     }
   }
 
