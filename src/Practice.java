@@ -114,7 +114,34 @@ public class Practice {
    * @return A set containing all reachable leaf vertices, or an empty set if vertex is null.
    */
   public <T> Set<Vertex<T>> leaves(Vertex<T> vertex) {
-    return null;
+    //collet leaf
+    Set<Vertex<T>> result = new HashSet<>();
+    //track visited
+    Set<Vertex<T>> visited = new HashSet<>();
+
+    leaves(vertex, visited, result);
+
+
+    return result;
+  }
+
+  //helper
+  public <T> void leaves(Vertex<T> vertex, Set<Vertex<T>> visited, Set<Vertex<T>> leaves){
+    
+  if(vertex == null || visited.contains(vertex)) return;
+    visited.add(vertex);
+      
+    //check if leaf
+  if(vertex.neighbors.isEmpty()){
+    leaves.add(vertex);
+    return;
+  }
+
+
+    //visit all neighbor
+    for(Vertex<T> neighbor : vertex.neighbors){
+      leaves(neighbor, visited, leaves);
+    }
   }
 
 
@@ -129,6 +156,24 @@ public class Practice {
    * @return true if all reachable vertices hold odd values, false otherwise
    */
   public boolean allOdd(Vertex<Integer> vertex) {
+    if(vertex == null )return true;
+
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    return allOdd(vertex, visited);
+  }
+
+  //helper method
+  public boolean allOdd(Vertex<Integer> vertex, Set<Vertex<Integer>> visited){
+    if(visited.contains(vertex)) return true;
+    visited.add(vertex);
+
+    //if even return false
+    if(vertex.data %2 == 0) return false;
+
+    //check neighbors
+    for(Vertex<Integer> neighbor : vertex.neighbors){
+      if(!allOdd(neighbor, visited)) return false;
+    }
     return true;
   }
 
@@ -147,6 +192,34 @@ public class Practice {
    * @throws NullPointerException if either start or end is null.
    */
   public boolean hasStrictlyIncreasingPath(Vertex<Integer> start, Vertex<Integer> end) {
-    return false;
+    if(start == null || end == null ){
+      throw new NullPointerException("Is null");
+    }
+
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    return hasStrictlyIncreasingPath(start, end, visited);
   }
+
+
+
+//helper method
+public boolean hasStrictlyIncreasingPath(Vertex<Integer> start, Vertex<Integer> end, Set<Vertex<Integer>> visited){
+  //if start == end  found  path
+  if(start == end){
+    return true;
+  }
+
+  visited.add(start);
+  //
+  for(Vertex<Integer> neighbor : start.neighbors){
+    //check if visited & value > current
+    if(!visited.contains(neighbor) && neighbor.data > start.data){
+      //check for path
+      if(hasStrictlyIncreasingPath(neighbor, end, visited)){
+        return true;
+      }
+    }
+  }
+  return false;
+}
 }
