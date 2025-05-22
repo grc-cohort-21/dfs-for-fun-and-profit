@@ -133,7 +133,25 @@ private <T> void findLeaves(Vertex<T> node, Set<Vertex<T>> visited, Set<Vertex<T
    * @return true if all reachable vertices hold odd values, false otherwise
    */
   public boolean allOdd(Vertex<Integer> vertex) {
-    return true;
+    return checkOdd(vertex, new HashSet<>());
+}
+
+private boolean checkOdd(Vertex<Integer> node, Set<Vertex<Integer>> visited) {
+  if (node == null) 
+  
+  return true;
+  if (visited.contains(node)) 
+  
+  return true;
+  visited.add(node);
+  if (node.data % 2 == 0) 
+  return false; 
+  for (Vertex<Integer> next : node.neighbors) {
+    if (!checkOdd(next, visited)) 
+    return false;
+  }
+
+  return true;
   }
 
   /**
