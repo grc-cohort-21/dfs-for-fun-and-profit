@@ -128,13 +128,13 @@ public class Practice {
 
     visited.add(vertex);
 
+    if(vertex.neighbors == null || vertex.neighbors.isEmpty())
+    {
+      leafSet.add(vertex);
+    }
     for(Vertex<T> current : vertex.neighbors)
     {
-      if(current.neighbors == null)
-      {
-        leafSet.add(current);
-      }
-      leaves(vertex, visited, leafSet);
+      leaves(current, visited, leafSet);
     }
     return leafSet;
   }
