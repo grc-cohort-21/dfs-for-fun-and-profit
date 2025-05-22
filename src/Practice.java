@@ -70,8 +70,24 @@ private <T> void dfsPrint(Vertex<T> vertex, Set<Vertex<T>> visited) {
    * @return The maximum value of any reachable vertex, or Integer.MIN_VALUE if vertex is null.
    */
   public int max(Vertex<Integer> vertex) {
-    return -1;
-  }
+      if (vertex == null) return Integer.MIN_VALUE;
+      return findBiggest(vertex, new HashSet<>());
+    }
+    
+    private int findBiggest(Vertex<Integer> node, Set<Vertex<Integer>> visited) {
+      if (node == null || visited.contains(node)) return Integer.MIN_VALUE;
+    
+      visited.add(node);
+      int biggest = node.data;
+    
+      for (Vertex<Integer> next : node.neighbors) {
+        int value = findBiggest(next, visited);
+        if (value > biggest) biggest = value;
+      }
+    
+      return biggest;
+    }
+    
 
   /**
    * Returns a set of all leaf vertices reachable from the given starting vertex.
@@ -85,7 +101,24 @@ private <T> void dfsPrint(Vertex<T> vertex, Set<Vertex<T>> visited) {
    * @return A set containing all reachable leaf vertices, or an empty set if vertex is null.
    */
   public <T> Set<Vertex<T>> leaves(Vertex<T> vertex) {
-    return null;
+    Set<Vertex<T>> result = new HashSet<>();
+  Set<Vertex<T>> visited = new HashSet<>();
+  findLeaves(vertex, visited, result); 
+  return result;
+}
+
+private <T> void findLeaves(Vertex<T> node, Set<Vertex<T>> visited, Set<Vertex<T>> result) {
+  if (node == null || visited.contains(node)) return;
+
+  visited.add(node);
+
+  if (node.neighbors.isEmpty()) {
+    result.add(node); 
+  }
+
+  for (Vertex<T> next : node.neighbors) {
+    findLeaves(next, visited, result);
+  }
   }
 
 
