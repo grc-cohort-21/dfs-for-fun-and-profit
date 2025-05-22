@@ -1,4 +1,7 @@
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Set;
 
 /**
@@ -163,6 +166,30 @@ public class Practice {
    * @throws NullPointerException if either start or end is null.
    */
   public boolean hasStrictlyIncreasingPath(Vertex<Integer> start, Vertex<Integer> end) {
-    return false;
+    Set<Vertex<Integer>> seen = new HashSet<>();
+    Queue<Integer> order = new LinkedList<>();
+    hasStrictlyIncreasingPath(start, end, seen, order);
+    int lastSeen = Integer.MIN_VALUE;
+    for (Integer integer : order) {
+      if(integer > lastSeen){
+        lastSeen = integer;
+      }else{
+        return false;
+      }
+    }
+    return true;
+  }
+
+  public void hasStrictlyIncreasingPath(Vertex<Integer> start, Vertex<Integer> end, Set<Vertex<Integer>> seen, Queue<Integer> order){
+    if(start == null || end == null) throw new NullPointerException();
+    if(seen.contains(start) || seen.contains(end)) return;
+
+    
+    seen.add(start);
+    order.add(start.data);
+
+    for (Vertex<Integer> neighbor : start.neighbors) {
+      hasStrictlyIncreasingPath(neighbor, end, seen, order);
+    }
   }
 }
