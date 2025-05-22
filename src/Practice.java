@@ -151,28 +151,26 @@ public class Practice {
    */
   public boolean allOdd(Vertex<Integer> vertex) {
     Set<Vertex<Integer>> set = new HashSet<>();
-    boolean check = true;
-    return allOdd(vertex, set,check);
+    return allOdd(vertex, set);
   }
-  public boolean allOdd(Vertex<Integer> vertex, Set<Vertex<Integer>> visited,Boolean check)
+  public boolean allOdd(Vertex<Integer> vertex, Set<Vertex<Integer>> visited)
   {
-    if(vertex == null || visited.contains(vertex)) return check;
+    if(vertex == null || visited.contains(vertex)) return true;
     visited.add(vertex);
 
     if(vertex.data % 2 == 0)
     {
-      check = false;
+      return false;
     }
 
     for(Vertex<Integer> current : vertex.neighbors)
     {
-      if(current.data % 2 == 0)
+      if(!allOdd(current, visited))
       {
-        check = false;
+        return false;
       }
-      allOdd(current, visited, check);
     }
-    return check; 
+    return true; 
   }
   /**
    * Determines whether there exists a strictly increasing path from the given start vertex
@@ -189,6 +187,19 @@ public class Practice {
    * @throws NullPointerException if either start or end is null.
    */
   public boolean hasStrictlyIncreasingPath(Vertex<Integer> start, Vertex<Integer> end) {
-    return false;
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    return hasStrictlyIncreasingPath(start, end, visited);
+  }
+  public boolean hasStrictlyIncreasingPath(Vertex<Integer> start, Vertex<Integer> end, Set<Vertex<Integer>> visited){
+    if(start == null || end == null) throw new NullPointerException("Cannot be null");
+    for(Vertex<Integer> current : start.neighbors)
+    {
+      if(current.data < start.data || current.data > end.data)
+      {
+        return false;
+      }
+       hasStrictlyIncreasingPath(start, end, visited);
+    }
+    return true;
   }
 }
