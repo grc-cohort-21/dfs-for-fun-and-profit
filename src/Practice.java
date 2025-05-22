@@ -1,3 +1,4 @@
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -17,7 +18,23 @@ public class Practice {
    *
    * @param vertex The starting vertex for the traversal.
    */
-  public <T> void printVertexVals(Vertex<T> vertex) {
+  public <T> void printVertexVals(Vertex<T> vertex)
+  {
+    Set<Vertex<T>> myVists = new HashSet<>();
+    printVertexValsHelper(vertex, myVists);
+  }
+
+  public <T> void printVertexValsHelper(Vertex<T> current, Set<Vertex<T>> vists)
+  {
+    if(current == null || vists.contains(current)) return;
+
+    System.out.println(current.data);
+    vists.add(current);
+
+    for(Vertex<T> neighbor : current.neighbors)
+    {
+      printVertexValsHelper(neighbor, vists);
+    }
   }
 
   /**
@@ -30,7 +47,22 @@ public class Practice {
    * @return A set containing all reachable vertices, or an empty set if vertex is null.
    */
   public <T> Set<Vertex<T>> reachable(Vertex<T> vertex) {
-    return null;
+    Set<Vertex<T>> set = new HashSet<>();
+    reachableHelper(vertex, set);
+    return set;
+  }
+
+  public <T> void reachableHelper(Vertex<T> current, Set<Vertex<T>> vists)
+  {
+    if(current == null || vists.contains(current)) return;
+
+    System.out.println(current.data);
+    vists.add(current);
+
+    for(Vertex<T> neighbor : current.neighbors)
+    {
+      reachableHelper(neighbor, vists);
+    }
   }
 
   /**
@@ -43,7 +75,22 @@ public class Practice {
    * @return The maximum value of any reachable vertex, or Integer.MIN_VALUE if vertex is null.
    */
   public int max(Vertex<Integer> vertex) {
-    return -1;
+    Set<Vertex<Integer>> set = new HashSet<>();
+    return maxHelper(vertex, set);
+  }
+
+  public int maxHelper(Vertex<Integer> current, Set<Vertex<Integer>> set)
+  {
+    if(current == null || set.contains(current)) return Integer.MIN_VALUE;
+
+    int maxVal = current.data;
+    set.add(current);
+
+    for(Vertex<Integer> neighbor : current.neighbors)
+    {
+      maxVal = Math.max(maxVal, maxHelper(neighbor, set));
+    }
+    return maxVal;
   }
 
   /**
@@ -58,7 +105,24 @@ public class Practice {
    * @return A set containing all reachable leaf vertices, or an empty set if vertex is null.
    */
   public <T> Set<Vertex<T>> leaves(Vertex<T> vertex) {
-    return null;
+    Set<Vertex<T>> set = new HashSet<>();
+    Set<Vertex<T>> resultLeaf = new HashSet<>();
+    leavesHelper(vertex, set, resultLeaf);
+
+    return resultLeaf;
+  }
+
+ public <T> void leavesHelper(Vertex<T> current, Set<Vertex<T>> vists, Set<Vertex<T>> leaf)
+  {
+    if(current == null || vists.contains(current)) return;
+
+    if(current.neighbors.isEmpty()) leaf.add(current);
+    vists.add(current);
+
+    for(Vertex<T> neighbor : current.neighbors)
+    {
+      leavesHelper(neighbor, vists, leaf);
+    }
   }
 
 
@@ -73,6 +137,25 @@ public class Practice {
    * @return true if all reachable vertices hold odd values, false otherwise
    */
   public boolean allOdd(Vertex<Integer> vertex) {
+    Set<Vertex<Integer>> set = new HashSet<>();
+
+    if(vertex == null) return true;
+
+    return allOddHelper(vertex, set);
+  }
+
+  public boolean allOddHelper(Vertex<Integer> current, Set<Vertex<Integer>> vists)
+  {
+    if(current == null || vists.contains(current)) return true;
+
+    if(current.data % 2 == 0) return false;
+    vists.add(current);
+
+    for(Vertex<Integer> neighbor : current.neighbors)
+    {
+      if(!allOddHelper(neighbor, vists)) return false;
+    }
+
     return true;
   }
 
@@ -91,6 +174,33 @@ public class Practice {
    * @throws NullPointerException if either start or end is null.
    */
   public boolean hasStrictlyIncreasingPath(Vertex<Integer> start, Vertex<Integer> end) {
+    if(start == null || end == null)
+    {
+      throw new NullPointerException("start or end is null");
+    }
+    
+    Set<Vertex<Integer>> set = new HashSet<>();
+
+    return strictlyIncreasingHelper(start, end, set);
+  }
+
+  public boolean strictlyIncreasingHelper(Vertex<Integer> start, Vertex<Integer> end, Set<Vertex<Integer>> vists)
+  {
+    if(start == end) return true;
+
+    vists.add(start);
+
+    for(Vertex<Integer> neighbor : start.neighbors)
+    {
+      if(!vists.contains(neighbor) && neighbor.data > start.data)
+      {
+        if(strictlyIncreasingHelper(neighbor, end, vists) == true)
+        {
+          return true;
+        }
+      }
+    }
+
     return false;
   }
 }
