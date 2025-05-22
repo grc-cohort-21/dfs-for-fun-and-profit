@@ -1,3 +1,4 @@
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -18,7 +19,27 @@ public class Practice {
    * @param vertex The starting vertex for the traversal.
    */
   public <T> void printVertexVals(Vertex<T> vertex) {
+    if (vertex == null) return;
+
+    Set<Vertex<T>> visited = new HashSet<>();
+    dfs(vertex, visited);
   }
+
+
+  public <T> void dfs(Vertex<T> vertex, Set<Vertex<T>> visited) {
+    if (visited.contains(vertex)) return;
+
+    visited.add(vertex);
+
+   
+    System.out.println(vertex.data);
+
+    
+    for (Vertex<T> neighbor : vertex.neighbors) {
+      dfs(neighbor, visited);
+    }
+  }
+  
 
   /**
    * Returns a set of all vertices reachable from the given starting vertex,
@@ -30,7 +51,14 @@ public class Practice {
    * @return A set containing all reachable vertices, or an empty set if vertex is null.
    */
   public <T> Set<Vertex<T>> reachable(Vertex<T> vertex) {
-    return null;
+     Set<Vertex<T>> visited = new HashSet<>();
+      if (vertex == null)
+       return visited;
+
+
+    dfs(vertex, visited);
+
+    return visited;
   }
 
   /**
@@ -43,7 +71,27 @@ public class Practice {
    * @return The maximum value of any reachable vertex, or Integer.MIN_VALUE if vertex is null.
    */
   public int max(Vertex<Integer> vertex) {
-    return -1;
+     if (vertex == null)
+     
+     return Integer.MIN_VALUE;
+
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    return maxDFS(vertex, visited);
+}
+
+  public int maxDFS(Vertex<Integer> vertex, Set<Vertex<Integer>> visited) {
+  if (visited.contains(vertex)) return Integer.MIN_VALUE;
+
+    visited.add(vertex);
+    int maxValue = vertex.data;
+
+    for (Vertex<Integer> neighbor : vertex.neighbors) {
+      int childMax = maxDFS(neighbor, visited);
+
+      maxValue = Math.max(maxValue, childMax);
+   }
+
+    return maxValue;
   }
 
   /**
@@ -58,7 +106,37 @@ public class Practice {
    * @return A set containing all reachable leaf vertices, or an empty set if vertex is null.
    */
   public <T> Set<Vertex<T>> leaves(Vertex<T> vertex) {
-    return null;
+
+  Set<Vertex<T>> leafSet = new HashSet<>();
+
+  Set<Vertex<T>> visited = new HashSet<>();
+
+  if (vertex == null) {
+    return leafSet;
+  }
+
+
+  findLeafNodes(vertex, visited, leafSet);
+  return leafSet;
+}
+
+
+  public <T> void findLeafNodes(Vertex<T> current, Set<Vertex<T>> visited, Set<Vertex<T>> leafSet) {
+  
+  if (visited.contains(current)) {
+    return;
+  }
+
+  
+  visited.add(current);
+
+  if (current.neighbors.isEmpty()) {
+    leafSet.add(current);
+  }
+
+  for (Vertex<T> neighbor : current.neighbors) {
+    findLeafNodes(neighbor, visited, leafSet);
+  }
   }
 
 
@@ -73,7 +151,37 @@ public class Practice {
    * @return true if all reachable vertices hold odd values, false otherwise
    */
   public boolean allOdd(Vertex<Integer> vertex) {
+
+    if (vertex == null) {
     return true;
+  }
+
+  Set<Vertex<Integer>> visited = new HashSet<>();
+
+  return checkOdd(vertex, visited);
+}
+
+
+  public boolean checkOdd(Vertex<Integer> current, Set<Vertex<Integer>> visited) {
+  if (visited.contains(current)) {
+    return true;
+  }
+
+
+  visited.add(current);
+
+  if (current.data % 2 == 0) {
+    return false;
+  }
+
+  for (Vertex<Integer> neighbor : current.neighbors) {
+    boolean neighborIsOdd = checkOdd(neighbor, visited);
+    if (!neighborIsOdd) {
+      return false; 
+    }
+  }
+
+  return true;
   }
 
   /**
@@ -91,6 +199,36 @@ public class Practice {
    * @throws NullPointerException if either start or end is null.
    */
   public boolean hasStrictlyIncreasingPath(Vertex<Integer> start, Vertex<Integer> end) {
-    return false;
+    
+  if (start == null || end == null) {
+    throw new NullPointerException("Start or end vertex is null");
+  }
+
+  Set<Vertex<Integer>> visited = new HashSet<>();
+
+  return findPath(start, end, visited);
+}
+
+
+  public boolean findPath(Vertex<Integer> current, Vertex<Integer> end, Set<Vertex<Integer>> visited) {
+  
+  if (current == end) {
+    return true;
+  }
+
+
+  visited.add(current);
+
+  
+  for (Vertex<Integer> neighbor : current.neighbors) {
+   
+    if (!visited.contains(neighbor) && neighbor.data > current.data) {
+      boolean found = findPath(neighbor, end, visited);
+      if (found) return true;
+    }
+  }
+
+
+  return false;
   }
 }
