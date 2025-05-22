@@ -1,3 +1,4 @@
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -17,8 +18,24 @@ public class Practice {
    *
    * @param vertex The starting vertex for the traversal.
    */
-  public <T> void printVertexVals(Vertex<T> vertex) {
+  public void printVertexVals(Vertex<Integer> vertex, Set<Vertex<Integer>> visited)
+  {
+    if(vertex == null || visited.contains(vertex)) return;
+
+    System.out.println(vertex.data);
+    visited.add(vertex);
+
+    for(Vertex<Integer> current : vertex.neighbors)
+    {
+      printVertexVals(current, visited);
+    }
   }
+
+  public  void printVertexVals(Vertex<Integer> vertex) {
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    printVertexVals(vertex, visited);
+  }
+
 
   /**
    * Returns a set of all vertices reachable from the given starting vertex,
@@ -30,7 +47,23 @@ public class Practice {
    * @return A set containing all reachable vertices, or an empty set if vertex is null.
    */
   public <T> Set<Vertex<T>> reachable(Vertex<T> vertex) {
-    return null;
+    Set<Vertex<T>> set = new HashSet<>();
+     return reachable(vertex, set);
+  }
+
+  public <T> Set<Vertex<T>> reachable(Vertex<T> vertex, Set<Vertex<T>> visited)
+  {
+    if(vertex == null || visited.contains(vertex))
+    {
+      return visited;
+    }
+    visited.add(vertex);
+    for(Vertex<T> current : vertex.neighbors)
+    {
+      reachable(current, visited);
+    }
+
+    return visited;
   }
 
   /**
@@ -43,7 +76,28 @@ public class Practice {
    * @return The maximum value of any reachable vertex, or Integer.MIN_VALUE if vertex is null.
    */
   public int max(Vertex<Integer> vertex) {
-    return -1;
+    Set<Vertex<Integer>> set = new HashSet<>();
+    return max(vertex, set);
+  }
+
+  public int max(Vertex<Integer> vertex, Set<Vertex<Integer>> visited) {
+    int max =Integer.MIN_VALUE;
+
+    if(vertex == null || visited.contains(vertex))
+    {
+      return max;
+    }
+    visited.add(vertex);
+
+    for(Vertex<Integer> current : vertex.neighbors)
+    {
+      max(current,visited);
+      if(max < current.data)
+      {
+        max = current.data;
+      }
+    }
+    return max;
   }
 
   /**
