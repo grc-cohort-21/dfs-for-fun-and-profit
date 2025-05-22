@@ -1,3 +1,4 @@
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -18,6 +19,19 @@ public class Practice {
    * @param vertex The starting vertex for the traversal.
    */
   public <T> void printVertexVals(Vertex<T> vertex) {
+    Set<Vertex<T>> noCopies = new HashSet<>();
+    printVertexVals(vertex, noCopies);
+  }
+
+  public <T> void printVertexVals(Vertex<T> vertex, Set<Vertex<T>> noCopies) {
+    if(vertex == null || noCopies.contains((vertex))) return;
+
+    System.out.println(vertex.data);
+    noCopies.add(vertex);
+
+    for(Vertex<T> neighbor : vertex.neighbors){
+      printVertexVals(neighbor, noCopies);
+    }
   }
 
   /**
@@ -30,7 +44,21 @@ public class Practice {
    * @return A set containing all reachable vertices, or an empty set if vertex is null.
    */
   public <T> Set<Vertex<T>> reachable(Vertex<T> vertex) {
-    return null;
+    Set<Vertex<T>> set = new HashSet<>();
+    reachable(vertex, set);
+    return set;
+  }
+
+  public <T> void reachable(Vertex<T> vertex, Set<Vertex<T>> set) {
+    if(vertex == null || set.contains(vertex)) return;
+
+    System.out.println(vertex.data);
+    set.add(vertex);
+
+    for(Vertex<T> neighbor : vertex.neighbors)
+    {
+      reachable(neighbor, set);
+    }
   }
 
   /**
