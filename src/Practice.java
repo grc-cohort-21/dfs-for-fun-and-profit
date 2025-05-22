@@ -157,7 +157,29 @@ public class Practice {
    * @return True if a strictly increasing path exists, false otherwise.
    * @throws NullPointerException if either start or end is null.
    */
-  public boolean hasStrictlyIncreasingPath(Vertex<Integer> start, Vertex<Integer> end) {
-    return false;
+  public boolean hasStrictlyIncreasingPath(Vertex<Integer> start, Vertex<Integer> end) 
+  {
+    if (start == null || end == null) throw new NullPointerException();
+    if (start == end) return true;
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    visited = hasStrictlyIncreasingPathHelper(start, visited);
+    boolean pathway = true;
+    int checkVal = Integer.MIN_VALUE;
+    for (Vertex<Integer> path : visited)
+    {
+      if (path.data > checkVal) checkVal = path.data;
+      else pathway = false;
+      if (path == end) return pathway;
+    }
+    return pathway;
   }
+
+  public Set<Vertex<Integer>> hasStrictlyIncreasingPathHelper(Vertex<Integer> start, Set<Vertex<Integer>> visited)
+  {
+    if (start == null || visited.contains(start)) return visited;
+    visited.add(start);
+    for (Vertex<Integer> neighbor : start.neighbors) hasStrictlyIncreasingPathHelper(neighbor, visited);
+    return visited;
+  }
+
 }
