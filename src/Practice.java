@@ -77,36 +77,25 @@ public class Practice {
    */
   public int max(Vertex<Integer> vertex) {
     Set<Vertex<Integer>> set = new HashSet<>();
-    return max(vertex, set);
+    return max(vertex, set, Integer.MIN_VALUE);
   }
 
-  public int max(Vertex<Integer> vertex, Set<Vertex<Integer>> visited) {
-    int parentMax =Integer.MIN_VALUE;
-    int neighborMax =Integer.MIN_VALUE;
-
+  public int max(Vertex<Integer> vertex, Set<Vertex<Integer>> visited, int max) {
     if(vertex == null || visited.contains(vertex))
     {
-      return parentMax;
+      return max;
     }
 
-    if(parentMax < vertex.data)
+    if(max < vertex.data)
     {
-      parentMax = vertex.data;
+      max = vertex.data;
     }
 
     visited.add(vertex);
 
     for(Vertex<Integer> current : vertex.neighbors)
     {
-      if(neighborMax < current.data)
-      {
-        neighborMax = current.data;
-      }
-      if(neighborMax > parentMax)
-      {
-        parentMax = neighborMax;
-      }
-      max(current, visited);
+      
     }
     return parentMax;
   }
