@@ -80,7 +80,7 @@ public class Practice {
    */
   public int max(Vertex<Integer> vertex) {
     List<Integer> nums = new ArrayList<>();
-    
+
     return max(vertex, nums);    
   }
 
@@ -141,7 +141,6 @@ public class Practice {
     }
   }
 
-
   /**
    * Returns whether all reachable vertices (including the starting vertex) hold
    * odd values. Returns false if at least one reachable vertex (including the starting vertex)
@@ -153,6 +152,33 @@ public class Practice {
    * @return true if all reachable vertices hold odd values, false otherwise
    */
   public boolean allOdd(Vertex<Integer> vertex) {
+    Set<Vertex<Integer>> visited = new HashSet<>();
+
+    return allOdd(vertex, visited);
+  }
+
+  private boolean allOdd(Vertex<Integer> vertex, Set<Vertex<Integer>> visited)
+  {
+    if(vertex == null || visited.contains(vertex))
+    {
+      return true;
+    }
+
+    visited.add(vertex);
+
+    if(vertex.data % 2 == 0)
+    {
+      return false;
+    }
+
+    for (Vertex<Integer> n : vertex.neighbors) 
+    {
+      if (!allOdd(n, visited)) 
+      {
+        return false;
+      }
+    }
+
     return true;
   }
 
@@ -171,6 +197,33 @@ public class Practice {
    * @throws NullPointerException if either start or end is null.
    */
   public boolean hasStrictlyIncreasingPath(Vertex<Integer> start, Vertex<Integer> end) {
+    Set<Vertex<Integer>> visited = new HashSet<>();
+
+    if(start == null || end == null)
+    {
+      throw new NullPointerException("start or end are null");
+    }
+
+    return hasStrictlyIncreasingPath(start, end, visited);
+  }
+
+  private boolean hasStrictlyIncreasingPath(Vertex<Integer> current, Vertex<Integer> end, Set<Vertex<Integer>> visited)
+  {
+    if(current == end)
+    {
+      return true;
+    }
+
+    visited.add(current);
+
+    for(Vertex<Integer> n : current.neighbors)
+    {
+      if(visited.contains(n) && current.data < n.data)
+      {
+        return true;
+      }
+      hasStrictlyIncreasingPath(n, end, visited);
+    }
     return false;
   }
 }
