@@ -102,9 +102,23 @@ public class Practice {
    * @return A set containing all reachable leaf vertices, or an empty set if vertex is null.
    */
   public <T> Set<Vertex<T>> leaves(Vertex<T> vertex) {
-    return null;
+    Set<Vertex<T>> seen = new HashSet<>();
+    Set<Vertex<T>> leaves = new HashSet<>();
+    leaves(vertex, seen, leaves);
+    return leaves;
   }
 
+  public <T> void leaves(Vertex<T> vertex,Set<Vertex<T>> seen,Set<Vertex<T>> leaves){
+    if(vertex == null || seen.contains(vertex)) return;
+    seen.add(vertex);
+
+    System.out.println(vertex.neighbors);
+    if(vertex.neighbors.isEmpty()) leaves.add(vertex);
+
+    for (Vertex<T> neighbor : vertex.neighbors) {
+      leaves(neighbor, seen, leaves);
+    }
+  }
 
   /**
    * Returns whether all reachable vertices (including the starting vertex) hold
@@ -117,7 +131,24 @@ public class Practice {
    * @return true if all reachable vertices hold odd values, false otherwise
    */
   public boolean allOdd(Vertex<Integer> vertex) {
-    return true;
+    Set<Vertex<Integer>> seen = new HashSet<>();
+    boolean isOdd = true;
+    allOdd(vertex, seen, isOdd);
+
+    return isOdd;
+  }
+
+  public <T> void allOdd(Vertex<Integer> vertex, Set<Vertex<Integer>> seen, boolean isOdd){
+    if(vertex == null || seen.contains(vertex)) return;
+    seen.add(vertex);
+    if(vertex.data % 2 == 0){
+      isOdd = false;
+    }
+
+
+    for (Vertex<Integer> neighbor : vertex.neighbors) {
+      allOdd(neighbor, seen, isOdd);
+    }
   }
 
   /**
