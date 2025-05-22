@@ -82,19 +82,23 @@ public class Practice {
 
   public int max(Vertex<Integer> vertex, Set<Vertex<Integer>> visited) {
     int max =Integer.MIN_VALUE;
-
     if(vertex == null || visited.contains(vertex))
     {
       return max;
     }
+    
+    if(max < vertex.data)
+    {
+      max = vertex.data;
+    }
+
     visited.add(vertex);
 
     for(Vertex<Integer> current : vertex.neighbors)
     {
-      max(current,visited);
       if(max < current.data)
       {
-        max = current.data;
+        max = max(vertex, visited);
       }
     }
     return max;
