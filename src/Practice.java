@@ -1,3 +1,4 @@
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -18,6 +19,12 @@ public class Practice {
    * @param vertex The starting vertex for the traversal.
    */
   public <T> void printVertexVals(Vertex<T> vertex) {
+    if (vertex == null) {
+      return;
+    }
+    for (Vertex<T> v : reachable(vertex)) {
+      System.out.println(v.data);
+    }
   }
 
   /**
@@ -29,8 +36,25 @@ public class Practice {
    * @param vertex The starting vertex for the traversal.
    * @return A set containing all reachable vertices, or an empty set if vertex is null.
    */
-  public <T> Set<Vertex<T>> reachable(Vertex<T> vertex) {
-    return null;
+  public <T> Set<Vertex<T>> reachable(Vertex<T> start) {
+    Set<Vertex<T>> visited = new HashSet<>();
+    if (start == null) {
+        return visited;
+    }
+    dfsReachable(start, visited);
+    return visited;
+  }
+
+  private <T> void dfsReachable(Vertex<T> v, Set<Vertex<T>> visited) {
+    if (v == null || visited.contains(v)) {
+        return;
+    }
+    visited.add(v);
+    if (v.neighbors != null) {
+        for (Vertex<T> neighbor : v.neighbors) {
+            dfsReachable(neighbor, visited);
+        }
+    }
   }
 
   /**
@@ -43,8 +67,17 @@ public class Practice {
    * @return The maximum value of any reachable vertex, or Integer.MIN_VALUE if vertex is null.
    */
   public int max(Vertex<Integer> vertex) {
-    return -1;
-  }
+    if (vertex == null) {
+      return Integer.MIN_VALUE;
+    }
+    int max = Integer.MIN_VALUE;
+    for (Vertex<Integer> v : reachable(vertex)) {
+      if (v.data > max) {
+          max = v.data;
+      }
+    }
+    return max;
+}
 
   /**
    * Returns a set of all leaf vertices reachable from the given starting vertex.
@@ -58,8 +91,17 @@ public class Practice {
    * @return A set containing all reachable leaf vertices, or an empty set if vertex is null.
    */
   public <T> Set<Vertex<T>> leaves(Vertex<T> vertex) {
-    return null;
-  }
+    Set<Vertex<T>> leaves = new HashSet<>();
+        if (vertex == null) {
+            return leaves;
+        }
+        for (Vertex<T> v : reachable(vertex)) {
+            if (v.neighbors == null || v.neighbors.isEmpty()) {
+                leaves.add(v);
+            }
+        }
+        return leaves;
+    }
 
 
   /**
@@ -73,8 +115,16 @@ public class Practice {
    * @return true if all reachable vertices hold odd values, false otherwise
    */
   public boolean allOdd(Vertex<Integer> vertex) {
+    if (vertex == null) {
+      return true;
+    }
+    for (Vertex<Integer> v : reachable(vertex)) {
+      if (v.data % 2 == 0) {
+          return false;
+      }
+    }
     return true;
-  }
+}
 
   /**
    * Determines whether there exists a strictly increasing path from the given start vertex
@@ -91,6 +141,29 @@ public class Practice {
    * @throws NullPointerException if either start or end is null.
    */
   public boolean hasStrictlyIncreasingPath(Vertex<Integer> start, Vertex<Integer> end) {
-    return false;
+    if (start == null || end == null) {
+        throw new NullPointerException();
+    }
+    return dfsIncreasing(start, end, start.data, new HashSet<>());
+  }
+
+  private boolean dfsIncreasing(Vertex<Integer> current,
+                                Vertex<Integer> end,
+                                int lastVal,
+                                Set<Vertex<Integer>> visited) {
+      if (current == end) {
+          return true;
+      }
+      visited.add(current);
+      if (current.neighbors != null) {
+          for (Vertex<Integer> neighbor : current.neighbors) {
+              if (!visited.contains(neighbor) && neighbor.data > lastVal) {
+                  if (dfsIncreasing(neighbor, end, neighbor.data, visited)) {
+                      return true;
+                  }
+              }
+          }
+      }
+      return false;
   }
 }
